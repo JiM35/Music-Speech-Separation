@@ -1,5 +1,3 @@
-# create_genre_folders_and_organize_files_by_genre.py
-
 import os
 import json
 import re
@@ -13,7 +11,6 @@ ignore_words = ['Remix', 'feat', 'Official Music Video', 'Lyric Video', 'Officia
 
 
 # Function to sanitize folder names
-# The sanitize_folder_name function ensures that folder names do not contain any illegal characters
 def sanitize_folder_name(name):
     return re.sub(r'[\\/:*?"<>|]', '_', name)
 
@@ -72,16 +69,24 @@ def move_files(data, source_folder, parent_folder, no_genre_folder):
             os.makedirs(folder_name)
 
         # Find the closest matching file in the source folder
-        closest_match = find_closest_match(f"{artist} - {title}", os.listdir(source_folder))
+        file_list = os.listdir(source_folder)
+        closest_match = find_closest_match(f"{artist} - {title}", file_list)
+
         if closest_match:
             src_file_path = os.path.join(source_folder, closest_match)
             dst_file_path = os.path.join(folder_name, closest_match)
-            shutil.move(src_file_path, dst_file_path)
-            print(f"Moved file: {closest_match} to folder: {folder_name}")
+
+            if os.path.isfile(src_file_path):
+                shutil.move(src_file_path, dst_file_path)
+                print(f"Moved file: {closest_match} to folder: {folder_name}")
+            else:
+                print(f"File not found: {src_file_path}")
+        else:
+            print(f"No close match found for: {artist} - {title}")
 
 
 # Read JSON data from a file
-with open('unique_audio_pairs.json', 'r') as file:
+with open('JSON files/unique_audio_pairs.json', 'r') as file:
     data = json.load(file)
 
 # Define the parent folder, source folder, and no genre folder

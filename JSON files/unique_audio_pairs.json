@@ -1,0 +1,246 @@
+[
+    {
+        "artist": "Mkubwa Na Wanawe",
+        "title": "Nitakupwelepweta",
+        "genreNames": [],
+        "duration_ms": null
+    },
+    {
+        "artist": "Darassa",
+        "title": "Loyalty (feat. Marioo & Nandy)",
+        "genreNames": [
+            "Afro-Pop",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 205691
+    },
+    {
+        "artist": "Ed Sheeran",
+        "title": "Perfect",
+        "genreNames": [
+            "Pop",
+            "Music"
+        ],
+        "duration_ms": 263400
+    },
+    {
+        "artist": "Metro Boomin",
+        "title": "Creepin' - Remix",
+        "genreNames": [
+            "Hip-Hop/Rap",
+            "Music"
+        ],
+        "duration_ms": 232800
+    },
+    {
+        "artist": "Ed Sheeran",
+        "title": "Perfect",
+        "genreNames": [],
+        "duration_ms": null
+    },
+    {
+        "artist": "Chris Brown",
+        "title": "Sensational",
+        "genreNames": [
+            "R&B/Soul",
+            "Music"
+        ],
+        "duration_ms": 231109
+    },
+    {
+        "artist": "Charisma",
+        "title": "SINA NOMA",
+        "genreNames": [
+            "Afro-Pop",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 189103
+    },
+    {
+        "artist": "Sean Paul",
+        "title": "Crick Neck",
+        "genreNames": [
+            "Modern Dancehall",
+            "Music",
+            "Reggae"
+        ],
+        "duration_ms": 157778
+    },
+    {
+        "artist": "Yungen",
+        "title": "Bestie",
+        "genreNames": [],
+        "duration_ms": null
+    },
+    {
+        "artist": "Fifth Harmony",
+        "title": "Worth It (No Rap)",
+        "genreNames": [
+            "Urbano latino",
+            "Music",
+            "Latin",
+            "Hip-Hop/Rap",
+            "Latin Rap"
+        ],
+        "duration_ms": 223423
+    },
+    {
+        "artist": "Virginia Morillas;Felicitas Lecot",
+        "title": "La Casa De Al Lado",
+        "genreNames": [],
+        "duration_ms": null
+    },
+    {
+        "artist": "Otile Brown",
+        "title": "Aiyana (feat. Sanaipei Tande)",
+        "genreNames": [
+            "Afro-Pop",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 184896
+    },
+    {
+        "artist": "Elliott Yamin",
+        "title": "Wait For You",
+        "genreNames": [
+            "Pop",
+            "Music",
+            "R&B/Soul",
+            "Soul",
+            "Neo-Soul",
+            "Contemporary R&B"
+        ],
+        "duration_ms": 261320
+    },
+    {
+        "artist": "Fifth Harmony",
+        "title": "Worth It",
+        "genreNames": [
+            "Pop",
+            "Music"
+        ],
+        "duration_ms": 224573
+    },
+    {
+        "artist": "Kirk Franklin",
+        "title": "Wanna Be Happy?",
+        "genreNames": [
+            "Christian",
+            "Music"
+        ],
+        "duration_ms": 265893
+    },
+    {
+        "artist": "Jason Derulo",
+        "title": "If I'm Lucky",
+        "genreNames": [
+            "Pop",
+            "Music"
+        ],
+        "duration_ms": 212013
+    },
+    {
+        "artist": "Color Me Badd",
+        "title": "The Earth, The Sun, The Rain",
+        "genreNames": [
+            "R&B/Soul",
+            "Music"
+        ],
+        "duration_ms": 256933
+    },
+    {
+        "artist": "M.Lalitha",
+        "title": "Thinking Of U",
+        "genreNames": [
+            "Alternative",
+            "Music"
+        ],
+        "duration_ms": 897306
+    },
+    {
+        "artist": "Oxlade",
+        "title": "KU LO SA - A COLORS SHOW",
+        "genreNames": [
+            "Afrobeats",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 147580
+    },
+    {
+        "artist": "ZAYN feat. PARTYNEXTDOOR",
+        "title": "Still Got Time (Team Salut Remix)",
+        "genreNames": [],
+        "duration_ms": null
+    },
+    {
+        "artist": "SANURI",
+        "title": "Career Moody",
+        "genreNames": [
+            "Alternative",
+            "Music"
+        ],
+        "duration_ms": 121000
+    },
+    {
+        "artist": "Ed Sheeran",
+        "title": "Perfect",
+        "genreNames": [],
+        "duration_ms": 259550
+    },
+    {
+        "artist": "Oxlade",
+        "title": "KU LO SA",
+        "genreNames": [
+            "Afrobeats",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 148800
+    },
+    {
+        "artist": "Sauti Sol featuring Bensoul, Nviiri The Storyteller, Crystal Asige and Kaskazini",
+        "title": "Extravaganza feat. Bensoul,Nviiri The Storyteller,Crystal Asige,Kaskazini",
+        "genreNames": [
+            "Afro-Pop",
+            "Music",
+            "African",
+            "Afro Soul"
+        ],
+        "duration_ms": 242973
+    },
+    {
+        "artist": "Muni Long",
+        "title": "Made For Me",
+        "genreNames": [
+            "R&B/Soul",
+            "Music"
+        ],
+        "duration_ms": 188000
+    },
+    {
+        "artist": "Brandy",
+        "title": "Human (Album Version)",
+        "genreNames": [
+            "R&B/Soul",
+            "Music",
+            "Rock",
+            "Contemporary R&B",
+            "Pop",
+            "Adult Contemporary"
+        ],
+        "duration_ms": 227440
+    },
+    {
+        "artist": "Sean Paul",
+        "title": "Gimme The Light",
+        "genreNames": [
+            "Pop",
+            "Music"
+        ],
+        "duration_ms": 228000
+    }
+]

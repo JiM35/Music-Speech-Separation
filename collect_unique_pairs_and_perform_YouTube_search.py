@@ -5,8 +5,8 @@ import webbrowser
 import keyboard
 
 # Paths to the JSON files
-file_path = 'audio_identification_results.json'
-output_path = 'unique_audio_pairs.json'
+file_path = 'JSON files/audio_identification_results.json'
+output_path = 'JSON files/unique_audio_pairs.json'
 
 
 # Recursive function to find a key in nested dictionaries
@@ -32,13 +32,15 @@ def extract_info(segment):
         artist = find_key(segment, "artist")
         title = find_key(segment, "title")
         genre_names = find_key(segment, "genreNames")
+        duration_ms = find_key(segment, "duration_ms")  # Extracting the duration in ms
 
         # Include segment if at least one of the fields is found
         if artist or title or genre_names:
             return {
                 "artist": artist,
                 "title": title,
-                "genreNames": genre_names
+                "genreNames": genre_names,
+                "duration_ms": duration_ms  # Adding duration to the output
             }
         else:
             return None
@@ -54,7 +56,7 @@ with open(file_path, 'r') as file:
 
 # Check if the data is a list of segments
 if isinstance(data, list):
-    # Use a set to collect unique (artist, title, genreNames) tuples
+    # Use a set to collect unique (artist, title, genreNames, duration_ms) tuples
     unique_pairs = set()
     search_queries = []
 
@@ -66,23 +68,27 @@ if isinstance(data, list):
         if info is not None:
             # Convert genreNames to a tuple to make it hashable
             genre_names_tuple = tuple(info['genreNames']) if info['genreNames'] else ()
-            pair = (info['artist'], info['title'], genre_names_tuple)
+            pair = (info['artist'], info['title'], genre_names_tuple, info['duration_ms'])
             if pair not in unique_pairs:
                 unique_pairs.add(pair)
                 search_queries.append(f"{info['artist']} {info['title']}")
 
     # Convert the set to a list of dictionaries for JSON serialization
-    unique_pairs_list = [{"artist": artist, "title": title, "genreNames": list(genre_names)} for
-                         artist, title, genre_names in unique_pairs]
+    unique_pairs_list = [{
+        "artist": artist,
+        "title": title,
+        "genreNames": list(genre_names),
+        "duration_ms": duration_ms
+    } for artist, title, genre_names, duration_ms in unique_pairs]
 
     # Save the unique pairs to a new JSON file
     with open(output_path, 'w') as output_file:
         json.dump(unique_pairs_list, output_file, indent=4)
 
     # Print the unique pairs to the console
-    print("Unique (artist, title, genreNames) pairs:")
-    for artist, title, genre_names in unique_pairs:
-        print(f"Artist: {artist}, Title: {title}, Genre Names: {genre_names}")
+    print("Unique (artist, title, genreNames, duration_ms) pairs:")
+    for artist, title, genre_names, duration_ms in unique_pairs:
+        print(f"Artist: {artist}, Title: {title}, Genre Names: {genre_names}, Duration: {duration_ms} ms")
 
 
     # Function to open a YouTube search and mark the segment as searched
@@ -111,18 +117,22 @@ if isinstance(data, list):
                     info = extract_info(segment)
                     if info is not None:
                         genre_names_tuple = tuple(info['genreNames']) if info['genreNames'] else ()
-                        unique_pairs.add((info['artist'], info['title'], genre_names_tuple))
+                        unique_pairs.add((info['artist'], info['title'], genre_names_tuple, info['duration_ms']))
 
-            unique_pairs_list = [{"artist": artist, "title": title, "genreNames": list(genre_names)} for
-                                 artist, title, genre_names in unique_pairs]
+            unique_pairs_list = [{
+                "artist": artist,
+                "title": title,
+                "genreNames": list(genre_names),
+                "duration_ms": duration_ms
+            } for artist, title, genre_names, duration_ms in unique_pairs]
 
             with open(output_path, 'w') as output_file:
                 json.dump(unique_pairs_list, output_file, indent=4)
 
             # Print updated unique pairs to verify
-            print("Updated unique (artist, title, genreNames) pairs:")
-            for artist, title, genre_names in unique_pairs:
-                print(f"Artist: {artist}, Title: {title}, Genre Names: {genre_names}")
+            print("Updated unique (artist, title, genreNames, duration_ms) pairs:")
+            for artist, title, genre_names, duration_ms in unique_pairs:
+                print(f"Artist: {artist}, Title: {title}, Genre Names: {genre_names}, Duration: {duration_ms} ms")
 
         else:
             print("No more search queries available. Press 'esc' to exit the script.")

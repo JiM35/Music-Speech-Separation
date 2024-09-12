@@ -3,6 +3,7 @@ import librosa
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics.pairwise import cosine_similarity
+import subprocess
 
 # Initialize the scaler
 scaler = StandardScaler()
@@ -10,12 +11,31 @@ scaler = StandardScaler()
 # Path to your audio dataset (songs used for training)
 audio_dataset_path = 'H:\\genre folders'
 # Path to the 20-hour DJ mix
-dj_mix_path = "H:\\genre folders\\Hip-Hop_Rap, Music\\Gucci Mane - Married with Millions [Official Music Video].mp3"
+dj_mix_path = "H:\\(Temporary) Radio Recordings\\soundcityfmnrb started 05-40-03 am ended 1-40-03 am.mp3"
+
+
+# Function to convert MP3 to WAV using ffmpeg
+def convert_mp3_to_wav(mp3_file):
+    wav_file = mp3_file.replace('.mp3', '.wav')
+    if not os.path.exists(wav_file):
+        command = f"ffmpeg -i \"{mp3_file}\" \"{wav_file}\""
+        try:
+            subprocess.run(command, shell=True, check=True)
+        except Exception as e:
+            print(f"Error converting {mp3_file} to WAV: {e}")
+            return None
+    return wav_file
 
 
 # Extract features from a song or DJ mix segment
 def feature_extractor(file, segment_length=60, sample_rate=22050):
     try:
+        # Convert to WAV if needed
+        if file.endswith('.mp3'):
+            file = convert_mp3_to_wav(file)
+            if file is None:
+                return None
+
         audio, sample_rate = librosa.load(file, sr=sample_rate, res_type='kaiser_fast')
 
         # Split the audio into segments
