@@ -1,43 +1,27 @@
 [
     {
-        "artist": "Mkubwa Na Wanawe",
-        "title": "Nitakupwelepweta",
-        "genreNames": [],
-        "duration_ms": null
-    },
-    {
-        "artist": "Darassa",
-        "title": "Loyalty (feat. Marioo & Nandy)",
+        "artist": "B2K",
+        "title": "Bump, Bump, Bump (B2K and P. Diddy) (Album Version)",
         "genreNames": [
-            "Afro-Pop",
+            "R&B/Soul",
             "Music",
-            "African"
-        ],
-        "duration_ms": 205691
-    },
-    {
-        "artist": "Ed Sheeran",
-        "title": "Perfect",
-        "genreNames": [
+            "Rock",
             "Pop",
-            "Music"
+            "Teen Pop",
+            "Dance"
         ],
-        "duration_ms": 263400
+        "duration_ms": 282773
     },
     {
-        "artist": "Metro Boomin",
-        "title": "Creepin' - Remix",
+        "artist": "Harrysong Feat. Fireboy DML & Olamide",
+        "title": "She Knows",
         "genreNames": [
-            "Hip-Hop/Rap",
-            "Music"
+            "Worldwide",
+            "Music",
+            "African",
+            "Afrobeats"
         ],
-        "duration_ms": 232800
-    },
-    {
-        "artist": "Ed Sheeran",
-        "title": "Perfect",
-        "genreNames": [],
-        "duration_ms": null
+        "duration_ms": 198333
     },
     {
         "artist": "Chris Brown",
@@ -49,14 +33,159 @@
         "duration_ms": 231109
     },
     {
-        "artist": "Charisma",
-        "title": "SINA NOMA",
+        "artist": "SANURI",
+        "title": "Career Moody",
         "genreNames": [
-            "Afro-Pop",
+            "Alternative",
+            "Music"
+        ],
+        "duration_ms": 121000
+    },
+    {
+        "artist": "Nelly",
+        "title": "My Place",
+        "genreNames": [],
+        "duration_ms": 272026
+    },
+    {
+        "artist": "Sean Paul",
+        "title": "Gimme The Light",
+        "genreNames": [
+            "Pop",
+            "Music"
+        ],
+        "duration_ms": 228000
+    },
+    {
+        "artist": "Oxlade",
+        "title": "KU LO SA - A COLORS SHOW",
+        "genreNames": [
+            "Afrobeats",
             "Music",
             "African"
         ],
-        "duration_ms": 189103
+        "duration_ms": 147580
+    },
+    {
+        "artist": "Kenny Lattimore",
+        "title": "Weekend",
+        "genreNames": [],
+        "duration_ms": null
+    },
+    {
+        "artist": "Johnny Benzx, Emilian Starz, LBK Nandeboy",
+        "title": "Bad Man Do",
+        "genreNames": [
+            "Afro-Beat",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 148793
+    },
+    {
+        "artist": "Lil Wayne",
+        "title": "Lollipop",
+        "genreNames": [
+            "Hip-Hop/Rap",
+            "Music",
+            "Dirty South"
+        ],
+        "duration_ms": 249266
+    },
+    {
+        "artist": "Adina Howard",
+        "title": "Freak Like Me",
+        "genreNames": [
+            "R&B/Soul",
+            "Music"
+        ],
+        "duration_ms": 253613
+    },
+    {
+        "artist": "Gucci Mane",
+        "title": "Married with Millions",
+        "genreNames": [
+            "Hip-Hop/Rap",
+            "Music"
+        ],
+        "duration_ms": 199128
+    },
+    {
+        "artist": "Oxlade",
+        "title": "KU LO SA",
+        "genreNames": [
+            "Afrobeats",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 148800
+    },
+    {
+        "artist": "Grandmaster Flash & The Furious Five",
+        "title": "The Message",
+        "genreNames": [],
+        "duration_ms": 194240
+    },
+    {
+        "artist": "Basshall Movement & Enur feat. Natasja",
+        "title": "Calabria (ZIGGY & Chick Flix 2018 Remix)",
+        "genreNames": [],
+        "duration_ms": null
+    },
+    {
+        "artist": "Ed Sheeran",
+        "title": "Perfect",
+        "genreNames": [
+            "Pop",
+            "Music"
+        ],
+        "duration_ms": 263400
+    },
+    {
+        "artist": "Victony",
+        "title": "Everything",
+        "genreNames": [
+            "Worldwide",
+            "Music"
+        ],
+        "duration_ms": 166958
+    },
+    {
+        "artist": "Sauti Sol featuring Bensoul, Nviiri The Storyteller, Crystal Asige and Kaskazini",
+        "title": "Extravaganza feat. Bensoul,Nviiri The Storyteller,Crystal Asige,Kaskazini",
+        "genreNames": [
+            "Afro-Pop",
+            "Music",
+            "African",
+            "Afro Soul"
+        ],
+        "duration_ms": 242973
+    },
+    {
+        "artist": "Metro Boomin",
+        "title": "Creepin' - Remix",
+        "genreNames": [
+            "Hip-Hop/Rap",
+            "Music"
+        ],
+        "duration_ms": 232800
+    },
+    {
+        "artist": "Mask Bass",
+        "title": "All Eyez on Me",
+        "genreNames": [
+            "Hip-Hop",
+            "Music",
+            "Hip-Hop/Rap",
+            "Gangsta Rap"
+        ],
+        "duration_ms": 174658
+    },
+    {
+        "artist": "Ed Sheeran",
+        "title": "Perfect",
+        "genreNames": [],
+        "duration_ms": 259550
     },
     {
         "artist": "Sean Paul",
@@ -69,10 +198,176 @@
         "duration_ms": 157778
     },
     {
-        "artist": "Yungen",
-        "title": "Bestie",
+        "artist": "Inner Circle",
+        "title": "Sweat (A La La La La Long)",
+        "genreNames": [
+            "Reggae",
+            "Music"
+        ],
+        "duration_ms": 227067
+    },
+    {
+        "artist": "2Pac",
+        "title": "All Eyez On Me",
+        "genreNames": [
+            "Hip-Hop/Rap",
+            "Music"
+        ],
+        "duration_ms": 307773
+    },
+    {
+        "artist": "Trick Trick",
+        "title": "Welcome 2 Detroit",
+        "genreNames": [
+            "R&B/Soul",
+            "Music",
+            "Hip-Hop/Rap",
+            "Hardcore Rap"
+        ],
+        "duration_ms": null
+    },
+    {
+        "artist": "Color Me Badd",
+        "title": "The Earth, The Sun, The Rain",
+        "genreNames": [
+            "R&B/Soul",
+            "Music"
+        ],
+        "duration_ms": 256933
+    },
+    {
+        "artist": "Chris Brown",
+        "title": "No Guidance",
+        "genreNames": [
+            "R&B/Soul",
+            "Music"
+        ],
+        "duration_ms": 260640
+    },
+    {
+        "artist": "Sarz/Lojay",
+        "title": "Billions",
+        "genreNames": [
+            "Afro-Beat",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 224003
+    },
+    {
+        "artist": "Uncle Waffles/Tony Duardo",
+        "title": "Tanzania feat. Sino Msolo,Boibizza",
+        "genreNames": [
+            "Amapiano",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 376078
+    },
+    {
+        "artist": "L.A.X",
+        "title": "Loke",
+        "genreNames": [
+            "African",
+            "Music",
+            "Afrobeats"
+        ],
+        "duration_ms": 175710
+    },
+    {
+        "artist": "3LW",
+        "title": "Playas Gon' Play (A cappella)",
+        "genreNames": [
+            "R&B/Soul",
+            "Music",
+            "Pop",
+            "Teen Pop"
+        ],
+        "duration_ms": 277373
+    },
+    {
+        "artist": "M.Lalitha",
+        "title": "Thinking Of U",
+        "genreNames": [
+            "Alternative",
+            "Music"
+        ],
+        "duration_ms": 897306
+    },
+    {
+        "artist": "Sean Paul",
+        "title": "Mad Love",
+        "genreNames": [
+            "Reggae",
+            "Music"
+        ],
+        "duration_ms": 199944
+    },
+    {
+        "artist": "Lil Wayne",
+        "title": "Lollipop",
+        "genreNames": [
+            "Hip-Hop/Rap",
+            "Music",
+            "Dirty South"
+        ],
+        "duration_ms": 301160
+    },
+    {
+        "artist": "Jason Derulo",
+        "title": "If I'm Lucky",
+        "genreNames": [
+            "Pop",
+            "Music"
+        ],
+        "duration_ms": 212013
+    },
+    {
+        "artist": "L.A.X, Magicsticks",
+        "title": "Loke",
+        "genreNames": [
+            "African",
+            "Music",
+            "Afrobeats"
+        ],
+        "duration_ms": 175710
+    },
+    {
+        "artist": "Mkubwa Na Wanawe",
+        "title": "Nitakupwelepweta",
         "genreNames": [],
         "duration_ms": null
+    },
+    {
+        "artist": "Khaid",
+        "title": "Jara",
+        "genreNames": [],
+        "duration_ms": null
+    },
+    {
+        "artist": "LL Cool J",
+        "title": "Doin' It",
+        "genreNames": [],
+        "duration_ms": null
+    },
+    {
+        "artist": "Victony",
+        "title": "Risk",
+        "genreNames": [
+            "Worldwide",
+            "Music"
+        ],
+        "duration_ms": 202958
+    },
+    {
+        "artist": "Darassa",
+        "title": "Loyalty (feat. Marioo & Nandy)",
+        "genreNames": [
+            "Afro-Pop",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 205691
     },
     {
         "artist": "Fifth Harmony",
@@ -87,8 +382,154 @@
         "duration_ms": 223423
     },
     {
+        "artist": "CKay",
+        "title": "capture my soul (feat. Joeboy)",
+        "genreNames": [
+            "Worldwide",
+            "Music"
+        ],
+        "duration_ms": 211293
+    },
+    {
+        "artist": "Shakes & Les",
+        "title": "Funk 99",
+        "genreNames": [
+            "Amapiano",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 377920
+    },
+    {
         "artist": "Virginia Morillas;Felicitas Lecot",
         "title": "La Casa De Al Lado",
+        "genreNames": [],
+        "duration_ms": null
+    },
+    {
+        "artist": "Future",
+        "title": "F*ck Up Some Commas",
+        "genreNames": [
+            "Hip-Hop/Rap",
+            "Music",
+            "Rap"
+        ],
+        "duration_ms": 237400
+    },
+    {
+        "artist": "Muni Long",
+        "title": "Made For Me",
+        "genreNames": [
+            "R&B/Soul",
+            "Music"
+        ],
+        "duration_ms": 188000
+    },
+    {
+        "artist": "Kirk Franklin",
+        "title": "Wanna Be Happy?",
+        "genreNames": [
+            "Christian",
+            "Music"
+        ],
+        "duration_ms": 265893
+    },
+    {
+        "artist": "Ed Sheeran",
+        "title": "Perfect",
+        "genreNames": [],
+        "duration_ms": null
+    },
+    {
+        "artist": "ZAYN feat. PARTYNEXTDOOR",
+        "title": "Still Got Time (Team Salut Remix)",
+        "genreNames": [],
+        "duration_ms": null
+    },
+    {
+        "artist": "Grace Wacuka Feat. Spizzo Cpy",
+        "title": "Black n' Beautiful",
+        "genreNames": [
+            "Hip-Hop/Rap",
+            "Music",
+            "Spoken Word"
+        ],
+        "duration_ms": 268800
+    },
+    {
+        "artist": "3LW",
+        "title": "Playas Gon' Play",
+        "genreNames": [
+            "R&B/Soul",
+            "Music",
+            "Pop",
+            "Teen Pop"
+        ],
+        "duration_ms": 283533
+    },
+    {
+        "artist": "Bagetti",
+        "title": "Mirror Talk",
+        "genreNames": [
+            "Afro-Beat",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 148499
+    },
+    {
+        "artist": "Grandmaster Flash",
+        "title": "The Message",
+        "genreNames": [],
+        "duration_ms": 429293
+    },
+    {
+        "artist": "Unstoppable DJ Nero",
+        "title": "How You Dey",
+        "genreNames": [
+            "Worldwide",
+            "Music"
+        ],
+        "duration_ms": 216265
+    },
+    {
+        "artist": "Britney Spears",
+        "title": "Born to Make You Happy",
+        "genreNames": [
+            "Pop",
+            "Music",
+            "Pop/Rock",
+            "Adult Contemporary",
+            "Teen Pop",
+            "Dance"
+        ],
+        "duration_ms": 243533
+    },
+    {
+        "artist": "Lost Boyz",
+        "title": "Renee",
+        "genreNames": [
+            "Hip-Hop/Rap",
+            "Music"
+        ],
+        "duration_ms": 293866
+    },
+    {
+        "artist": "Ciara",
+        "title": "Like A Boy",
+        "genreNames": [
+            "R&B/Soul",
+            "Music",
+            "Contemporary R&B",
+            "Rock",
+            "Hip-Hop/Rap",
+            "Rap"
+        ],
+        "duration_ms": 237053
+    },
+    {
+        "artist": "Yungen",
+        "title": "Bestie",
         "genreNames": [],
         "duration_ms": null
     },
@@ -101,6 +542,26 @@
             "African"
         ],
         "duration_ms": 184896
+    },
+    {
+        "artist": "Rayvanny",
+        "title": "Sensema",
+        "genreNames": [
+            "Amapiano",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 256991
+    },
+    {
+        "artist": "Charisma",
+        "title": "SINA NOMA",
+        "genreNames": [
+            "Afro-Pop",
+            "Music",
+            "African"
+        ],
+        "duration_ms": 189103
     },
     {
         "artist": "Elliott Yamin",
@@ -125,101 +586,35 @@
         "duration_ms": 224573
     },
     {
-        "artist": "Kirk Franklin",
-        "title": "Wanna Be Happy?",
+        "artist": "Eminem;Trick Trick",
+        "title": "Welcome to Detroit (feat. Eminem)",
         "genreNames": [
-            "Christian",
-            "Music"
-        ],
-        "duration_ms": 265893
-    },
-    {
-        "artist": "Jason Derulo",
-        "title": "If I'm Lucky",
-        "genreNames": [
-            "Pop",
-            "Music"
-        ],
-        "duration_ms": 212013
-    },
-    {
-        "artist": "Color Me Badd",
-        "title": "The Earth, The Sun, The Rain",
-        "genreNames": [
-            "R&B/Soul",
-            "Music"
-        ],
-        "duration_ms": 256933
-    },
-    {
-        "artist": "M.Lalitha",
-        "title": "Thinking Of U",
-        "genreNames": [
-            "Alternative",
-            "Music"
-        ],
-        "duration_ms": 897306
-    },
-    {
-        "artist": "Oxlade",
-        "title": "KU LO SA - A COLORS SHOW",
-        "genreNames": [
-            "Afrobeats",
+            "Hip-Hop/Rap",
             "Music",
-            "African"
+            "R&B/Soul"
         ],
-        "duration_ms": 147580
+        "duration_ms": 286903
     },
     {
-        "artist": "ZAYN feat. PARTYNEXTDOOR",
-        "title": "Still Got Time (Team Salut Remix)",
-        "genreNames": [],
-        "duration_ms": null
-    },
-    {
-        "artist": "SANURI",
-        "title": "Career Moody",
+        "artist": "Le'Laika",
+        "title": "Uwanja wa Mchezo (Pieces of Me)",
         "genreNames": [
-            "Alternative",
-            "Music"
-        ],
-        "duration_ms": 121000
-    },
-    {
-        "artist": "Ed Sheeran",
-        "title": "Perfect",
-        "genreNames": [],
-        "duration_ms": 259550
-    },
-    {
-        "artist": "Oxlade",
-        "title": "KU LO SA",
-        "genreNames": [
-            "Afrobeats",
-            "Music",
-            "African"
-        ],
-        "duration_ms": 148800
-    },
-    {
-        "artist": "Sauti Sol featuring Bensoul, Nviiri The Storyteller, Crystal Asige and Kaskazini",
-        "title": "Extravaganza feat. Bensoul,Nviiri The Storyteller,Crystal Asige,Kaskazini",
-        "genreNames": [
-            "Afro-Pop",
+            "Afro Soul",
             "Music",
             "African",
-            "Afro Soul"
+            "Afro-Pop"
         ],
-        "duration_ms": 242973
+        "duration_ms": 177560
     },
     {
-        "artist": "Muni Long",
-        "title": "Made For Me",
+        "artist": "VASA",
+        "title": "Trabaye",
         "genreNames": [
-            "R&B/Soul",
-            "Music"
+            "Afrobeats",
+            "Music",
+            "African"
         ],
-        "duration_ms": 188000
+        "duration_ms": 176000
     },
     {
         "artist": "Brandy",
@@ -233,14 +628,5 @@
             "Adult Contemporary"
         ],
         "duration_ms": 227440
-    },
-    {
-        "artist": "Sean Paul",
-        "title": "Gimme The Light",
-        "genreNames": [
-            "Pop",
-            "Music"
-        ],
-        "duration_ms": 228000
     }
 ]
