@@ -1,5 +1,3 @@
-# identify_songs_in_audio_file.py
-
 import requests
 import ffmpeg
 import json
@@ -9,7 +7,7 @@ import os
 API_KEY = '055e9477fae3ad290470847bc2ae34f7'
 
 # Input audio file
-input_audio = "H:\\(Temporary) Radio Recordings\\nrg started 01-54-23 am.mp3"
+input_audio = "H:/(Temporary) Radio Recordings/soundcityfmnrb started 04-53-30 am ended 9-59-39 am.mp3"
 
 # Output JSON file directory
 output_json_file = "JSON files/audio_identification_results.json"
@@ -28,28 +26,42 @@ if os.path.exists(additional_output_json_file):
 else:
     print(f"Processing audio file: {input_audio}")
 
-
     # Function to send audio segment to AudD
     def identify_song(file_path, api_key):
         with open(file_path, 'rb') as f:
-            files = {
-                'file': f
-            }
-            data = {
-                'api_token': api_key,
-                'return': 'timecode,apple_music,spotify'
-            }
-            response = requests.post('https://api.audd.io/', data=data, files=files)
-        return response.json()
+            files = {'file': f}
+            data = {'api_token': api_key, 'return': 'timecode,apple_music,spotify'}
+            try:
+                response = requests.post('https://api.audd.io/', data=data, files=files)
+                response.raise_for_status()  # Raise an HTTPError for bad responses
+                response_json = response.json()  # Attempt to decode the JSON response
+                if response_json:  # Check if the response JSON is not empty
+                    return response_json
+                else:
+                    print(f"Empty JSON response for file {file_path}")
+                    return {}
+            except requests.exceptions.RequestException as e:
+                print(f"Request error for file {file_path}: {e}")
+                return {}
+            except json.JSONDecodeError as e:
+                print(f"JSON decode error for file {file_path}: {e}")
+                return {}
 
+    # Function to get the duration of the audio file
+    def get_audio_duration(file_path):
+        probe = ffmpeg.probe(file_path)
+        duration = float(probe['format']['duration'])
+        return duration
+
+    # Get the full duration of the audio file
+    duration = get_audio_duration(input_audio)
 
     # Increase segment length and adjust overlap
     segment_length = 90  # 90 seconds
-    overlap = 20  # 20 seconds
-    duration = 3600  # 1 hour
+    overlap = 30  # 20 seconds
 
-    # Generate segment timestamps
-    timestamps = [(i, min(i + segment_length, duration)) for i in range(0, duration, segment_length - overlap)]
+    # Generate segment timestamps for the full duration of the file
+    timestamps = [(i, min(i + segment_length, duration)) for i in range(0, int(duration), segment_length - overlap)]
 
     # Container to store results
     results = []
@@ -72,7 +84,6 @@ else:
         results.append({'segment': i + 1, 'start': start, 'end': end, 'result': result})
         print(f'Segment {i + 1}:', result)
 
-
     # Function to save results into a JSON file
     def save_results_to_file(file_path, results):
         if os.path.exists(file_path):
@@ -84,7 +95,6 @@ else:
         else:
             with open(file_path, 'w') as json_file:
                 json.dump(results, json_file, indent=4)
-
 
     # Save results to the main output JSON file
     save_results_to_file(output_json_file, results)

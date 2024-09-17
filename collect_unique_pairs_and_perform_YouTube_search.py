@@ -6,6 +6,7 @@ import keyboard
 file_path = 'JSON files/audio_identification_results.json'
 output_path = 'JSON files/unique_audio_pairs.json'
 
+
 # Recursive function to find a key in nested dictionaries
 def find_key(data, target_key):
     if isinstance(data, dict):
@@ -21,6 +22,7 @@ def find_key(data, target_key):
             if found is not None:
                 return found
     return None
+
 
 # Function to extract information from a segment
 def extract_info(segment):
@@ -45,12 +47,14 @@ def extract_info(segment):
         print(f"Error extracting info: {e}")
         return None
 
+
 # Read and parse the JSON file
 with open(file_path, 'r') as file:
     data = json.load(file)
 
 # Ask user if they want to search the entire file regardless of 'searched' flag
-search_all = input("Do you want to search the entire file regardless of whether they were searched? (y/n): ").strip().lower()
+search_all = input(
+    "Do you want to search the entire file regardless of whether they were searched? (y/n): ").strip().lower()
 
 # Check if the data is a list of segments
 if isinstance(data, list):
@@ -137,6 +141,7 @@ if isinstance(data, list):
 
             else:
                 print("No more search queries available. Press 'esc' to exit the script.")
+
 
         # Set up the keyboard shortcut (e.g., "ctrl+shift+s")
         keyboard.add_hotkey('ctrl+shift+s', open_search)

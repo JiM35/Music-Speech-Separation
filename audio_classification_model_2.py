@@ -11,11 +11,11 @@ scaler = StandardScaler()
 # Path to your audio dataset (songs used for training)
 audio_dataset_path = 'H:\\genre folders'
 # Path to the 20-hour DJ mix
-dj_mix_path = "H:/(Temporary) Radio Recordings/Joshua Baraka - NANA Remix (Feat. Joeboy, King Promise & BIEN) (Official Video).wav"
+dj_mix_path = "H:/(Temporary) Radio Recordings/Rema, Shallipopi - BENIN BOYS.wav"
 
 
-# Function to split the large MP3 file into smaller segments using ffmpeg and save them in a new folder
-def split_audio(input_file, segment_length=180):
+# Function to split the large MP3 file into overlapping smaller segments using ffmpeg and save them in a new folder
+def split_audio(input_file, segment_length=180, overlap=0.5):
     # Create a new folder for the segments based on the original file name
     file_name = os.path.splitext(os.path.basename(input_file))[0]
     output_dir = os.path.join(os.path.dirname(input_file), f"{file_name}_wav_segments")
@@ -28,86 +28,62 @@ def split_audio(input_file, segment_length=180):
     os.makedirs(output_dir, exist_ok=True)
 
     try:
-        # Command to split the file using ffmpeg and save directly to WAV
+        # Calculate segment start times based on overlap
+        segment_offset = int(segment_length * (1 - overlap))  # Overlap as a fraction of the segment length
+        segment_duration_str = str(segment_length)
+        segment_offset_str = str(segment_offset)
+
+        # Command to split the file using ffmpeg and save directly to WAV with overlapping segments
         ffmpeg_command = [
-            'ffmpeg', '-i', input_file, '-f', 'segment', '-segment_time', str(segment_length),
+            'ffmpeg', '-i', input_file, '-f', 'segment', '-segment_time', segment_duration_str,
+            '-segment_start_number', '0', '-segment_time_delta', segment_offset_str,
             '-c', 'pcm_s16le', '-ar', '44100', os.path.join(output_dir, 'segment_%03d.wav')
         ]
         subprocess.run(ffmpeg_command, check=True)
-        print(f"Audio split into {segment_length // 60} minute WAV segments and saved in {output_dir}")
+        print(f"Audio split into {segment_length // 60} minute WAV segments with {int(overlap * 100)}% overlap and saved in {output_dir}")
         return output_dir
     except subprocess.CalledProcessError as e:
         print(f"Error splitting audio: {e}")
         return None
 
 
-# Extract features from a song or DJ mix segment
-def feature_extractor(file, segment_length=180, sample_rate=44100):
+# Extract features from a song or DJ mix segment based on its actual length
+def feature_extractor(file, sample_rate=44100):
     try:
         audio, sample_rate = librosa.load(file, sr=sample_rate, res_type='kaiser_fast')
 
-        # Split the audio into segments
-        segment_length = segment_length * sample_rate  # segment_length is in seconds
-        num_segments = int(len(audio) / segment_length)
-        all_features = []
+        # Extract features
+        mfccs = np.mean(librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=40).T, axis=0)
+        chroma = np.mean(librosa.feature.chroma_stft(y=audio, sr=sample_rate).T, axis=0)
+        mel = np.mean(librosa.feature.melspectrogram(y=audio, sr=sample_rate).T, axis=0)
+        contrast = np.mean(librosa.feature.spectral_contrast(y=audio, sr=sample_rate).T, axis=0)
+        tonnetz = np.mean(librosa.feature.tonnetz(y=librosa.effects.harmonic(audio), sr=sample_rate).T, axis=0)
+        tempo, _ = librosa.beat.beat_track(y=audio, sr=sample_rate)
 
-        for i in range(num_segments):
-            start = i * segment_length
-            end = start + segment_length
-            segment = audio[start:end]
+        stft = librosa.stft(audio)
+        stft_magnitude, stft_phase = np.abs(stft), np.angle(stft)
 
-            # Extract features
-            mfccs = np.mean(librosa.feature.mfcc(y=segment, sr=sample_rate, n_mfcc=40).T, axis=0)
-            chroma = np.mean(librosa.feature.chroma_stft(y=segment, sr=sample_rate).T, axis=0)
-            mel = np.mean(librosa.feature.melspectrogram(y=segment, sr=sample_rate).T, axis=0)
-            contrast = np.mean(librosa.feature.spectral_contrast(y=segment, sr=sample_rate).T, axis=0)
-            tonnetz = np.mean(librosa.feature.tonnetz(y=librosa.effects.harmonic(segment), sr=sample_rate).T, axis=0)
-            tempo, _ = librosa.beat.beat_track(y=segment, sr=sample_rate)
+        stft_magnitude_mean = np.mean(stft_magnitude, axis=1)
+        stft_phase_mean = np.mean(stft_phase, axis=1)
 
-            stft = librosa.stft(segment)
-            stft_magnitude, stft_phase = np.abs(stft), np.angle(stft)
+        # Combine features
+        combined_features = np.hstack((
+            mfccs.flatten(), chroma.flatten(), mel.flatten(), contrast.flatten(), tonnetz.flatten(),
+            np.array([tempo]).flatten(),
+            stft_magnitude_mean.flatten(), stft_phase_mean.flatten()
+        ))
 
-            stft_magnitude_mean = np.mean(stft_magnitude, axis=1)
-            stft_phase_mean = np.mean(stft_phase, axis=1)
-
-            # Combine features
-            combined_features = np.hstack((
-                mfccs.flatten(), chroma.flatten(), mel.flatten(), contrast.flatten(), tonnetz.flatten(),
-                np.array([tempo]).flatten(),
-                stft_magnitude_mean.flatten(), stft_phase_mean.flatten()
-            ))
-
-            all_features.append(combined_features)
-
-        if len(all_features) == 0:
-            return None
-        aggregated_features = np.mean(all_features, axis=0)
-
-        return aggregated_features
+        return combined_features
 
     except Exception as e:
         print(f"Error processing {file}: {e}")
         return None
 
 
-# Load and extract features for each song in the training dataset
-def load_training_songs(audio_dataset_path):
-    training_songs = {}
-    for genre in os.listdir(audio_dataset_path):
-        genre_path = os.path.join(audio_dataset_path, genre)
-        if os.path.isdir(genre_path):
-            for file in os.listdir(genre_path):
-                file_path = os.path.join(genre_path, file)
-                features = feature_extractor(file_path)
-                if features is not None:
-                    training_songs[file] = features
-    return training_songs
-
-
-# Extract features for the DJ mix and predict which songs are present
-def process_dj_mix(dj_mix_path, training_songs, segment_length=180):
+# Process the DJ mix and predict which songs are present
+def process_dj_mix(dj_mix_path, training_songs):
     # Split the DJ mix into smaller segments
-    segment_dir = split_audio(dj_mix_path, segment_length)
+    segment_dir = split_audio(dj_mix_path)
 
     if segment_dir is None:
         print("Audio splitting failed.")
@@ -115,9 +91,10 @@ def process_dj_mix(dj_mix_path, training_songs, segment_length=180):
 
     # Extract features from each segment of the DJ mix
     predictions = []
+    segment_number = 1  # Start segment numbering from 1
     for segment_file in sorted(os.listdir(segment_dir)):
         segment_path = os.path.join(segment_dir, segment_file)
-        dj_mix_features = feature_extractor(segment_path, segment_length)
+        dj_mix_features = feature_extractor(segment_path)
 
         if dj_mix_features is None:
             print(f"Could not extract features from {segment_path}")
@@ -148,9 +125,23 @@ def process_dj_mix(dj_mix_path, training_songs, segment_length=180):
                 highest_similarity = similarity
                 closest_match = song
 
-        predictions.append(closest_match)
+        predictions.append((segment_number, closest_match))
+        segment_number += 1  # Increment segment number
 
     return predictions
+
+
+def load_training_songs(audio_dataset_path):
+    training_songs = {}
+    for genre in os.listdir(audio_dataset_path):
+        genre_path = os.path.join(audio_dataset_path, genre)
+        if os.path.isdir(genre_path):
+            for file in os.listdir(genre_path):
+                file_path = os.path.join(genre_path, file)
+                features = feature_extractor(file_path)
+                if features is not None:
+                    training_songs[file] = features
+    return training_songs
 
 
 # Main script execution
@@ -161,9 +152,12 @@ if __name__ == "__main__":
 
     # Process the DJ mix and predict songs
     print("Processing the DJ mix...")
-    predicted_songs = process_dj_mix(dj_mix_path, training_songs, segment_length=180)
+    predicted_songs = process_dj_mix(dj_mix_path, training_songs)
 
     # Output the predictions
-    print("Predicted songs in the DJ mix:")
-    for song in predicted_songs:
-        print(song)
+    if predicted_songs:
+        print("Predicted songs in the DJ mix:")
+        for segment_number, song in predicted_songs:
+            print(f"Segment {segment_number} was predicted to have the song: {song}")
+    else:
+        print("No songs were predicted.")
