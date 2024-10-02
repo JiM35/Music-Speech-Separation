@@ -1,6 +1,5 @@
 import os
 import librosa
-import numpy as np
 import subprocess
 import h5py
 from sklearn.preprocessing import StandardScaler
@@ -9,10 +8,14 @@ from sklearn.metrics.pairwise import cosine_similarity
 # Initialize the scaler
 scaler = StandardScaler()
 
+# ANSI code for green text
+GREEN = "\033[92m"
+RESET = "\033[0m"
+
 # Path to your audio dataset (songs used for training)
 audio_dataset_path = 'H:\\genre folders'
 # Path to the 20-hour DJ mix
-dj_mix_path = "H:\\(Temporary) Radio Recordings\\soundcityfmnrb started 04-53-30 am ended 9-59-39 am.mp3"
+dj_mix_path = "H:/(Temporary) Radio Recordings/soundcityfmnrb started 05-40-03 am ended 1-40-03 am.mp3"
 # Path to HDF5 file for storing features
 hdf5_path = 'audio_features.h5'
 
@@ -47,107 +50,36 @@ def split_audio(input_file, segment_length=60, overlap=0.7):
         return None
 
 
-# Function to extract and save MFCC, Delta, and Delta-Delta features
-def feature_extractor(file, sample_rate=44100, n_mfcc=30):
-    try:
-        # Load the audio file
-        audio, sr = librosa.load(file, sr=sample_rate, res_type='kaiser_fast')
-
-        # Extract MFCC features
-        mfccs = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=n_mfcc)
-
-        # Compute Delta (1st derivative) and Delta-Delta (2nd derivative) features
-        mfccs_delta = librosa.feature.delta(mfccs)
-        mfccs_delta2 = librosa.feature.delta(mfccs, order=2)
-
-        # Combine MFCCs, Delta, and Delta-Delta into one feature set
-        combined_features = np.vstack((mfccs, mfccs_delta, mfccs_delta2))
-
-        # Take the mean over time for each coefficient
-        combined_features_mean = np.mean(combined_features.T, axis=0)
-
-        # Standardize the combined features (better done across the dataset, not per file)
-        combined_features_scaled = scaler.fit_transform(combined_features_mean.reshape(-1, 1)).flatten()
-
-        return combined_features_scaled
-
-    except Exception as e:
-        print(f"Error processing {file}: {e}")
-        return None
-
-
-# Process the DJ mix and predict which songs are present
-def process_dj_mix(dj_mix_path, training_songs):
-    segment_dir = split_audio(dj_mix_path)
-
-    if segment_dir is None:
-        print("Audio splitting failed.")
-        return []
-
-    predictions = []
-    segment_number = 0
-
-    # Process each segment of the DJ mix
-    for segment_file in sorted(os.listdir(segment_dir)):
-        segment_path = os.path.join(segment_dir, segment_file)
-        dj_mix_features = feature_extractor(segment_path)
-
-        if dj_mix_features is None:
-            print(f"Could not extract features from {segment_path}")
-            continue
-
-        # Compare with training songs
-        max_similarity = -1
-        predicted_song = None
-
-        for song_name, song_features in training_songs.items():
-            # Compute cosine similarity between the DJ mix segment and the training song features
-            similarity = cosine_similarity(
-                dj_mix_features.reshape(1, -1),
-                song_features.reshape(1, -1)
-            )[0][0]
-
-            if similarity > max_similarity:
-                max_similarity = similarity
-                predicted_song = song_name
-
-        if predicted_song:
-            predictions.append((segment_number, predicted_song))
-            print(f"Segment {segment_number}: Predicted song - {predicted_song} (Similarity: {max_similarity:.4f})")
-        else:
-            print(f"Segment {segment_number}: No match found")
-
-        segment_number += 1
-
-    return predictions
-
-
 def load_training_songs(audio_dataset_path, hdf5_path):
     training_songs = {}
 
-    # Check if the HDF5 file exists before loading features
-    if not os.path.exists(hdf5_path):
-        print(f"HDF5 file {hdf5_path} does not exist. Features will be extracted and saved.")
+    # Check if the HDF5 file exists
+    processed_songs = []
+    if os.path.exists(hdf5_path):
+        # Open the HDF5 file to check which songs already have features saved
+        with h5py.File(hdf5_path, 'r') as hf:
+            processed_songs = list(hf.keys())
 
     for genre in os.listdir(audio_dataset_path):
         genre_path = os.path.join(audio_dataset_path, genre)
         if os.path.isdir(genre_path):
             for file in os.listdir(genre_path):
-                file_path = os.path.join(genre_path, file)
                 song_name = os.path.splitext(file)[0]
+                file_path = os.path.join(genre_path, file)
 
-                # Try loading from HDF5 first, if it exists
-                features = None
-                if os.path.exists(hdf5_path):
+                if song_name in processed_songs:
+                    # Skip processing this file since its features already exist in HDF5
+                    print(f"Features for {song_name} are already processed. Skipping...")
                     features = load_features_from_hdf5(hdf5_path, song_name)
-
-                if features is None:  # If not found in HDF5, extract and save
+                else:
+                    # If song is new, extract and save features
                     features = feature_extractor(file_path)
                     if features is not None:
                         save_features_to_hdf5(hdf5_path, song_name, features)
 
                 if features is not None:
                     training_songs[song_name] = features
+
     return training_songs
 
 
@@ -172,12 +104,81 @@ def load_features_from_hdf5(hdf5_file, song_name):
             return None
 
 
-# Main script execution
+# Feature extractor function
+def feature_extractor(file, feature_type='mfcc', sample_rate=44100, n_mfcc=500):
+    try:
+        # Load the audio file
+        audio, sr = librosa.load(file, sr=sample_rate, res_type='kaiser_fast')
+
+        if feature_type == 'mfcc':
+            # Extract MFCC features
+            mfccs = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=n_mfcc).mean(axis=1)
+            return mfccs
+        else:
+            print(f"Unknown feature type: {feature_type}")
+            return None
+
+    except Exception as e:
+        print(f"Error processing {file} with {feature_type}: {e}")
+        return None
+
+
+# Process the DJ mix without majority voting
+def process_dj_mix(dj_mix_path, training_songs):
+    segment_dir = split_audio(dj_mix_path)
+
+    if segment_dir is None:
+        print("Audio splitting failed.")
+        return []
+
+    predictions = []
+    segment_number = 0
+
+    # Process each segment of the DJ mix
+    for segment_file in sorted(os.listdir(segment_dir)):
+        segment_path = os.path.join(segment_dir, segment_file)
+
+        print(f"\nSegment {segment_number}:")  # Show the current segment number
+
+        # Extract MFCC features from the DJ mix segment
+        dj_mix_features = feature_extractor(segment_path)
+
+        if dj_mix_features is None:
+            print(f"Could not extract features from {segment_path}")
+            continue
+
+        # Compare with training songs
+        max_similarity = -1
+        predicted_song = None
+
+        for song_name, song_features in training_songs.items():
+            # Compute cosine similarity between the DJ mix segment and the training song features
+            similarity = cosine_similarity(
+                dj_mix_features.reshape(1, -1),
+                song_features.reshape(1, -1)
+            )[0][0]
+
+            if similarity > max_similarity:
+                max_similarity = similarity
+                predicted_song = song_name
+
+        if predicted_song:
+            print(f"{GREEN}Predicted: {predicted_song} (Similarity: {max_similarity:.4f}){RESET}")
+            predictions.append(predicted_song)
+        else:
+            print(f"No match found for segment {segment_number}")
+
+        segment_number += 1
+
+    return predictions
+
+
+# Main script execution without majority voting
 if __name__ == "__main__":
     print("Loading training songs...")
     training_songs = load_training_songs(audio_dataset_path, hdf5_path)
 
-    print("Processing the DJ mix...")
+    print("Processing the DJ mix and showing predictions...")
     predicted_songs = process_dj_mix(dj_mix_path, training_songs)
 
     if predicted_songs:
