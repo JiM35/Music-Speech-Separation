@@ -7,12 +7,12 @@ import pandas as pd
 from scipy.signal import savgol_filter
 
 # Load the audio file
-audio_path = "H:/(Temporary) Radio Recordings/soundcityfmnrb started 04-53-30 am ended 9-59-39 am.mp3"
+audio_path = "H:/(Temporary) Radio Recordings/Idowest - Theresa (Audio slide).wav"
 y, sr = librosa.load(audio_path)
 
 # Define the frame length and hop length
 frame_length = 512  # Increased frame length for more smoothing
-hop_length = 2048  # Increased hop length for fewer transitions
+hop_length = 1024  # Increased hop length for fewer transitions
 
 # Calculate the RMS energy
 rms = librosa.feature.rms(y=y, frame_length=frame_length, hop_length=hop_length)[0]
@@ -79,7 +79,7 @@ beat_intervals = np.diff(beat_times)
 tempo_over_time = 60.0 / beat_intervals
 
 # Define a threshold for significant tempo changes
-tempo_change_threshold = 100  # Adjust as necessary
+tempo_change_threshold = 2  # Adjust as necessary
 significant_tempo_changes = np.where(np.abs(np.diff(tempo_over_time)) > tempo_change_threshold)[0]
 
 # Print detected tempo changes
@@ -99,6 +99,7 @@ plt.ylabel('BPM')
 plt.title('Tempo Changes Over Time')
 plt.legend()
 plt.show()
+
 
 # --------------------------------------
 # Harmonic/Key Changes (Chroma)
