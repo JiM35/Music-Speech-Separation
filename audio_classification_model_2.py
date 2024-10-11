@@ -17,7 +17,7 @@ audio_dataset_path = 'H:\\genre folders'
 # Path to the 20-hour DJ mix
 dj_mix_path = "H:/(Temporary) Radio Recordings/soundcityfmnrb started 04-53-30 am ended 9-59-39 am.mp3"
 # Path to HDF5 file for storing features
-hdf5_path = 'audio_features.h5'
+hdf5_path = 'mfcc_features.h5'
 
 
 # Function to split the large MP3 file into overlapping smaller segments using ffmpeg and save them in a new folder
@@ -105,7 +105,7 @@ def load_features_from_hdf5(hdf5_file, song_name):
 
 
 # Feature extractor function
-def feature_extractor(file, feature_type='mfcc', sample_rate=44100, n_mfcc=500):
+def feature_extractor(file, feature_type='mfcc', sample_rate=44100, n_mfcc=512):
     try:
         # Load the audio file
         audio, sr = librosa.load(file, sr=sample_rate, res_type='kaiser_fast')
