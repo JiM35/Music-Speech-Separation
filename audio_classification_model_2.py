@@ -15,13 +15,13 @@ RESET = "\033[0m"
 # Path to your audio dataset (songs used for training)
 audio_dataset_path = 'H:\\genre folders'
 # Path to the 20-hour DJ mix
-dj_mix_path = "C:/Users/giton/Desktop/combined_audio.mp3"
+dj_mix_path = "H:/(Temporary) Radio Recordings/soundcityfmnrb started 04-53-30 am ended 9-59-39 am.mp3"
 # Path to HDF5 file for storing features
 hdf5_path = 'audio_features.h5'
 
 
 # Function to split the large MP3 file into overlapping smaller segments using ffmpeg and save them in a new folder
-def split_audio(input_file, segment_length=60, overlap=0.2):
+def split_audio(input_file, segment_length=90, overlap=0.2):
     file_name = os.path.splitext(os.path.basename(input_file))[0]
     output_dir = os.path.join(os.path.dirname(input_file), f"{file_name}_wav_segments")
 

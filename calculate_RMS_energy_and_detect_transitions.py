@@ -1,76 +1,113 @@
+import os
 import librosa
 import numpy as np
-import matplotlib.pyplot as plt
+import h5py
+from scipy.signal import savgol_filter
 import datetime
 
-import pandas as pd
-from scipy.signal import savgol_filter
 
-# Load the audio file
-audio_path = "H:/experiment_songs/combined_audio.wav"
-y, sr = librosa.load(audio_path)
-
-# Define the frame length and hop length
-frame_length = 512  # Increased frame length for more smoothing
-hop_length = 2048  # Increased hop length for fewer transitions
-
-# Calculate the RMS energy
-rms = librosa.feature.rms(y=y, frame_length=frame_length, hop_length=hop_length)[0]
-
-# Compute time frames corresponding to RMS values
-frames = range(len(rms))
-t = librosa.frames_to_time(frames, sr=sr, hop_length=hop_length)
-
-# Smooth the RMS energy using a Savitzky-Golay filter
-rms_smooth = savgol_filter(rms, window_length=51, polyorder=2)
-
-# Set a threshold for detecting low-energy segments (gaps)
-energy_threshold = np.median(rms_smooth) * 0.5  # Adjust depending on audio characteristics
-low_energy_indices = np.where(rms_smooth < energy_threshold)[0]
-
-# Group consecutive low-energy indices as one transition
-min_gap_duration = 10  # Minimum gap duration between songs in seconds
-gap_frames = librosa.time_to_frames(min_gap_duration, sr=sr, hop_length=hop_length)
-
-# Initialize an empty list to store the indices of detected transitions
-filtered_transitions = []
-
-# Find continuous low-energy segments
-start_idx = low_energy_indices[0]
-for i in range(1, len(low_energy_indices)):
-    if low_energy_indices[i] - low_energy_indices[i - 1] > gap_frames:
-        # End of a low-energy segment, find the minimum RMS energy point in this segment
-        segment = rms_smooth[start_idx:low_energy_indices[i - 1] + 1]
-        min_energy_idx = np.argmin(segment) + start_idx  # Find index of minimum RMS in the segment
-        filtered_transitions.append(min_energy_idx)
-        start_idx = low_energy_indices[i]  # Start new segment
-
-# Make sure to add the last segment
-segment = rms_smooth[start_idx:low_energy_indices[-1] + 1]
-min_energy_idx = np.argmin(segment) + start_idx
-filtered_transitions.append(min_energy_idx)
-
-# Convert frames to times
-transition_times = librosa.frames_to_time(filtered_transitions, sr=sr, hop_length=hop_length)
-
-
-# Function to convert seconds to hh:mm:ss
+# Function to convert seconds to hh:mm:ss with sub-second precision
 def seconds_to_hms(seconds):
-    return str(datetime.timedelta(seconds=int(seconds)))
+    return str(datetime.timedelta(seconds=seconds))  # Keep fractional seconds
 
 
-# Print the timings of the detected transitions in hh:mm:ss format
-print("Filtered transition times (hh:mm:ss):")
-for time in transition_times:
-    print(seconds_to_hms(time))
+# Function to extract BPMs from an audio file
+def extract_bpm_sequence(audio_path, hop_length=2048):
+    y, sr = librosa.load(audio_path)
+    # Tempo/Beat detection
+    _, beats = librosa.beat.beat_track(y=y, sr=sr, hop_length=hop_length)
 
-# Plot the RMS energy and detected transitions
-plt.figure(figsize=(10, 6))
-plt.plot(t, rms, label='RMS Energy')
-plt.scatter(librosa.frames_to_time(filtered_transitions, sr=sr, hop_length=hop_length),
-            rms[filtered_transitions], color='red', label='Detected Transitions', zorder=2)
-plt.xlabel('Time (s)')
-plt.ylabel('RMS Energy')
-plt.title('RMS Energy with Detected Gaps (Transitions)')
-plt.legend()
-plt.show()
+    if len(beats) < 2:
+        return None, None  # Not enough beats for BPM calculation
+
+    beat_times = librosa.frames_to_time(beats, sr=sr, hop_length=hop_length)
+    beat_intervals = np.diff(beat_times)
+    tempo_over_time = 60.0 / beat_intervals
+
+    # Apply Savitzky-Golay filter to smooth
+    smoothed_tempo = savgol_filter(tempo_over_time, window_length=7, polyorder=2)
+
+    return smoothed_tempo, beat_times
+
+
+# Save BPM sequences for all training songs, skipping already processed files
+def save_bpm_data(genre_folder, output_h5):
+    # Open or create the HDF5 file
+    with h5py.File(output_h5, 'a') as h5_file:
+        for genre in os.listdir(genre_folder):
+            genre_path = os.path.join(genre_folder, genre)
+
+            if os.path.isdir(genre_path):
+                # Create a group for the genre if it doesn't exist
+                if genre not in h5_file:
+                    genre_group = h5_file.create_group(genre)
+                else:
+                    genre_group = h5_file[genre]
+
+                for song_file in os.listdir(genre_path):
+                    if song_file.endswith('.wav'):
+                        # Skip the song if it's already processed
+                        if song_file in genre_group:
+                            print(f"Skipped (already processed): {song_file}")
+                            continue
+
+                        song_path = os.path.join(genre_path, song_file)
+                        bpm_sequence, beat_times = extract_bpm_sequence(song_path)
+
+                        if bpm_sequence is not None:
+                            # Store BPM sequence and beat times in the HDF5 file
+                            song_group = genre_group.create_group(song_file)
+                            song_group.create_dataset('bpm_sequence', data=bpm_sequence)
+                            song_group.create_dataset('beat_times', data=beat_times)
+                            print(f"Processed: {song_file}")
+                        else:
+                            print(f"Skipped: {song_file} (Not enough beats)")
+
+
+# Predict song by matching BPM sequences with similarity score
+def predict_song(audio_path, output_h5, hop_length=2048):
+    new_bpm_sequence, _ = extract_bpm_sequence(audio_path, hop_length=hop_length)
+
+    if new_bpm_sequence is None:
+        return "No beats detected in the song."
+
+    # Open the HDF5 file to access stored BPM data
+    with h5py.File(output_h5, 'r') as h5_file:
+        best_match = None
+        best_similarity = 0.0  # Similarity score, where higher is better
+
+        for genre in h5_file:
+            genre_group = h5_file[genre]
+
+            for song_file in genre_group:
+                song_group = genre_group[song_file]
+                stored_bpm_sequence = np.array(song_group['bpm_sequence'])
+
+                min_len = min(len(new_bpm_sequence), len(stored_bpm_sequence))
+
+                # Calculate the absolute difference between the two sequences
+                diff = np.sum(np.abs(new_bpm_sequence[:min_len] - stored_bpm_sequence[:min_len]))
+
+                # Normalize the difference based on the number of beats compared
+                normalized_diff = diff / min_len if min_len > 0 else float('inf')
+
+                # Convert difference to similarity score (higher score is better)
+                similarity_score = 1 / (1 + normalized_diff)
+
+                if similarity_score > best_similarity:
+                    best_similarity = similarity_score
+                    best_match = (genre, song_file, similarity_score)
+
+        return best_match if best_match else "No match found"
+
+
+genre_folder = "H:/genre folders"
+output_h5 = "bpm_data.h5"
+
+# Save BPMs of training songs, skipping already processed files
+save_bpm_data(genre_folder, output_h5)
+
+# Predict new song
+audio_path = "H:/genre folders/Hip-Hop_Rap, Music/Dip - Tyga ft. Nicki Minaj (lyrics).wav"
+match = predict_song(audio_path, output_h5)
+print(f"Predicted match: {match}")
